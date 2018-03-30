@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<link>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/angular-material/angular-material.css">
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-animate/angular-animate.js"></script>
+    <script src="node_modules/angular-aria/angular-aria.js"></script>
+    <script src="node_modules/angular-material/angular-material.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/service.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxWg_dCSGSLkb7VhGzylndBTRWg59OS44&libraries=geometry"></script>
+</head>
+<body ng-app="testFrontEnd">
+    <div layout-margin>
+        <h2>Front End Test !</h2>
+    </div>
+    <div layout="row" ng-controller="testCtrl">
+        <div flex="50" ng-if="showList">
+            <div layout="row"  layout-margin>
+                <div flex="30" layout-padding layout-margin>
+                    SORT BY :
+                </div>
+                <div flex="30">
+                    <md-button ng-click="orderBy(orderByName)">
+                        <md-icon md-svg-src="{{imageSortByName}}" aria-label="Insert Drive Icon">
+                        </md-icon>
+                    </md-button>
+                </div>
+                <div flex="30" >
+                    <md-button ng-click="orderBy(orderByRating)">
+                        <md-icon md-svg-src="{{imageRating}}" aria-label="Insert Drive Icon">
+                        </md-icon>
+                    </md-button>
+                </div>
+            </div>
+            <div class="container-info" id="scroll">
+                <md-card ng-repeat="info in listItem  | orderBy:myFilter">
+                    <md-card-content>
+                        <h2>{{$index + 1}}. {{info.name}}</h2>
+                        <div layout="row" layout-margin>
+                            <div ng-repeat="i in getRating(info.rating) track by $index">
+                                <div>
+                                    <md-icon md-svg-src="{{imageRating}}" aria-label="Insert Drive Icon">
+                                    </md-icon>
+                                </div>
+                            </div>
+                            <div ng-repeat="i in getRating(4 - info.rating) track by $index">
+                                <div>
+                                    <md-icon md-svg-src="{{imageRatingTotal}}" aria-label="Insert Drive Icon">
+                                    </md-icon>
+                                </div>
+                            </div>
+                        </div>
+                        <div layout-margin ng-if="info.completeInfo">
+                            <div>
+                                {{info.contact.phone}}
+                            </div>
+                            <div>
+                                <a href="{{info.contact.site}}" target="_blank">
+                                    <md-icon md-svg-src="{{linkInfoBlack}}" aria-label="Insert Drive Icon">
+                                    </md-icon>
+                                </a>
+                                {{info.contact.site}}
+                            </div>
+                            <div>
+                                {{info.address.street}}
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center" >
+                        <md-button  ng-click="info.completeInfo = !info.completeInfo" >
+                            Detail
+                        </md-button>
+                        <md-button  class="md-icon-button" ng-click="findLocation(info)" >
+                            <md-icon md-svg-src="{{imagePath}}" aria-label="Insert Drive Icon">
+                            </md-icon>
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+        </div>
+        <div flex="50" class="container-info" ng-if="!showList">
+            <div layout-margin layout-padding>
+                <div layout="row">
+                    <div flex="70" class="titleAverageRating"> There are
+                        <strong>{{comparisonArray.length}}</strong> restaurants in this area and the average rating is: <strong>{{avg}}</strong></div>
+                    <div flex="30" class="buttonClose">
+                        <md-button class="md-fab" ng-click="hideComparisonSection()">
+                            <md-icon md-svg-src="{{imageClose}}" aria-label="Insert Drive Icon">
+                            </md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <md-grid-list md-cols="2" md-gutter="1em" md-row-height="4:3">
+                    <md-grid-tile class="tilesShadow" ng-repeat="suggestion in comparisonArray | orderBy:orderByRating" ng-mouseenter="displayPopUp($index, suggestion)" ng-mouseleave="removePopUp()">
+                        <div layout="row">
+                            <div layout-margin layout="column">
+                                <div>
+                                    {{suggestion.contact.phone}}
+                                </div>
+                                <div>
+                                    {{suggestion.address.street}}
+                                </div>
+                            </div>
+                            <div class="numberRating">
+                                {{suggestion.rating}}
+                            </div>
+                            <md-icon md-svg-src="{{imageRating}}" aria-label="Insert Drive Icon">
+                            </md-icon>
+                        </div>
+                        <md-grid-tile-footer>
+                            <a href="{{suggestion.contact.site}}" target="_blank">
+                                <md-icon md-svg-src="{{linkInfo}}" aria-label="Insert Drive Icon">
+                                </md-icon>
+                            </a>
+                            {{suggestion.name}}
+                        </md-grid-tile-footer>
+                    </md-grid-tile>
+                </md-grid-list>
+            </div>
+        </div>
+        <div flex="50" id="map"></div>
+    </div>
+</body>
+</html>

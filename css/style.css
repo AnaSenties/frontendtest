@@ -1,0 +1,31 @@
+#map {
+    height:870px;
+}
+.container-info{
+    height:800px;
+    overflow: auto;
+}
+
+.tilesShadow{
+    box-shadow: 3px 3px #e7e7e7;
+}
+
+.numberRating{
+    font-size: 43pt;
+    padding-top: 12px;
+}
+
+.titleAverageRating{
+    font-size: 15pt;
+    padding-top: 12px;
+}
+
+.buttonClose{
+    text-align: right;
+}
+
+md-grid-tile-footer figcaption{
+    font-size: 15pt;
+    text-align: center;
+    margin-left: 7px;
+}
